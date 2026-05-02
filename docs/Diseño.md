@@ -1,5 +1,5 @@
 # Diseño de la API
-#Maria Clara Medina y Franchesca Garcia Tabares
+# Maria Clara Medina y Franchesca Garcia Tabares
 
 ## 1. Propósito del proyecto
 
