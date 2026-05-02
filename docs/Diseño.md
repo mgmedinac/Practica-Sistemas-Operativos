@@ -135,7 +135,7 @@ p-0001
 
 Un programa almacena ejecutable, argumentos, variables de ambiente, descripción y estado.
 
-| Operación | `datos` esperados | Respuesta principal |
+| Operación | Datos esperados | Respuesta principal |
 |---|---|---|
 | `registrar_programa` | `{ "ejecutable": "/usr/bin/wc", "argumentos": ["-l"], "ambiente": { "LANG": "es_CO.UTF-8" }, "descripcion": "Cuenta líneas" }` | Retorna `id_programa`. |
 | `leer_programa` | `{ "id_programa": "p-0001" }` | Retorna la información del programa. |
@@ -206,7 +206,7 @@ Ejemplo:
 f-0001
 ```
 
-| Operación | `datos` esperados | Respuesta principal |
+| Operación | Datos esperados | Respuesta principal |
 |---|---|---|
 | `crear_fichero` | `{ "contenido": "texto inicial" }` o `{ "contenido": "" }` | Retorna `id_fichero`. |
 | `leer_fichero` | `{ "id_fichero": "f-0001" }` | Retorna el contenido del fichero. |
@@ -326,7 +326,7 @@ Ejemplo conceptual:
 f-0001 -> p-0001 -> p-0002 -> f-0002
 ```
 
-| Operación | `datos` esperados | Respuesta principal |
+| Operación | Datos esperados | Respuesta principal |
 |---|---|---|
 | `ejecutar_lote` | `{ "entrada": "f-0001", "salida": "f-0002", "programas": ["p-0001", "p-0002"] }` | Retorna `id_lote`. |
 | `estado_lote` | `{ "id_lote": "l-0001" }` | Retorna el estado del lote. |
