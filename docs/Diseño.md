@@ -1,5 +1,5 @@
-# Diseño de la API 
-# Maria Clara Medina y Franchesca Garcia Tabares
+# Diseño de la API
+#Maria Clara Medina y Franchesca Garcia Tabares
 
 ## 1. Propósito del proyecto
 
@@ -115,9 +115,13 @@ Respuesta con error:
 
 ## 5. Servicios de la API
 
+En esta sección se definen los servicios principales y las operaciones que acepta cada uno. Para no repetir demasiado, primero se muestran las operaciones en tablas y luego algunos ejemplos JSON de las peticiones más importantes.
+
+---
+
 ### 5.1 gesprog
 
-`gesprog` administra los programas registrados. Cada programa se identifica con el formato:
+`gesprog` administra los programas registrados en `aralmac`. Cada programa se identifica con el formato:
 
 ```text
 p-XXXX
@@ -131,17 +135,18 @@ p-0001
 
 Un programa almacena ejecutable, argumentos, variables de ambiente, descripción y estado.
 
-Operaciones:
+| Operación | `datos` esperados | Respuesta principal |
+|---|---|---|
+| `registrar_programa` | `{ "ejecutable": "/usr/bin/wc", "argumentos": ["-l"], "ambiente": { "LANG": "es_CO.UTF-8" }, "descripcion": "Cuenta líneas" }` | Retorna `id_programa`. |
+| `leer_programa` | `{ "id_programa": "p-0001" }` | Retorna la información del programa. |
+| `listar_programas` | `{}` | Lista los programas registrados. |
+| `actualizar_programa` | `{ "id_programa": "p-0001", "ejecutable": "/usr/bin/wc", "argumentos": ["-w"], "ambiente": {}, "descripcion": "Cuenta palabras" }` | Actualiza el programa. |
+| `borrar_programa` | `{ "id_programa": "p-0001" }` | Borra el programa. |
+| `suspender_servicio` | `{}` | Cambia el servicio a `suspendido`. |
+| `reasumir_servicio` | `{}` | Cambia el servicio a `corriendo`. |
+| `terminar_servicio` | `{}` | Cambia el servicio a `terminado`. |
 
-| Operación | Descripción |
-|---|---|
-| `registrar_programa` | Registra un ejecutable con argumentos y ambiente. |
-| `leer_programa` | Consulta un programa. |
-| `listar_programas` | Lista los programas registrados. |
-| `actualizar_programa` | Modifica un programa. |
-| `borrar_programa` | Borra un programa. |
-
-Ejemplo:
+Ejemplo para registrar programa:
 
 ```json
 {
@@ -172,11 +177,24 @@ Respuesta:
 }
 ```
 
+Ejemplo para leer programa:
+
+```json
+{
+    "id_peticion": "req-0002",
+    "servicio": "gesprog",
+    "operacion": "leer_programa",
+    "datos": {
+        "id_programa": "p-0001"
+    }
+}
+```
+
 ---
 
 ### 5.2 gesfich
 
-`gesfich` administra los ficheros registrados. Cada fichero se identifica con el formato:
+`gesfich` administra los ficheros registrados en `aralmac`. Cada fichero se identifica con el formato:
 
 ```text
 f-XXXX
@@ -188,21 +206,23 @@ Ejemplo:
 f-0001
 ```
 
-Operaciones:
-
-| Operación | Descripción |
-|---|---|
-| `crear_fichero` | Crea un fichero vacío o con contenido. |
-| `leer_fichero` | Lee un fichero específico o lista los ficheros si no recibe identificador. |
-| `listar_ficheros` | Lista los ficheros registrados. |
-| `actualizar_fichero` | Reemplaza el contenido usando la ruta de un fichero externo. |
-| `borrar_fichero` | Borra un fichero. |
+| Operación | `datos` esperados | Respuesta principal |
+|---|---|---|
+| `crear_fichero` | `{ "contenido": "texto inicial" }` o `{ "contenido": "" }` | Retorna `id_fichero`. |
+| `leer_fichero` | `{ "id_fichero": "f-0001" }` | Retorna el contenido del fichero. |
+| `leer_fichero` | `{}` | Lista los ficheros registrados. |
+| `listar_ficheros` | `{}` | Lista los ficheros registrados. |
+| `actualizar_fichero` | `{ "id_fichero": "f-0001", "ruta_fichero": "./datos/nuevo.txt" }` | Reemplaza el contenido en `aralmac`. |
+| `borrar_fichero` | `{ "id_fichero": "f-0001" }` | Borra el fichero. |
+| `suspender_servicio` | `{}` | Cambia el servicio a `suspendido`. |
+| `reasumir_servicio` | `{}` | Cambia el servicio a `corriendo`. |
+| `terminar_servicio` | `{}` | Cambia el servicio a `terminado`. |
 
 Ejemplo para crear fichero:
 
 ```json
 {
-    "id_peticion": "req-0002",
+    "id_peticion": "req-0003",
     "servicio": "gesfich",
     "operacion": "crear_fichero",
     "datos": {
@@ -215,7 +235,7 @@ Respuesta:
 
 ```json
 {
-    "id_peticion": "req-0002",
+    "id_peticion": "req-0003",
     "estado": "ok",
     "mensaje": "Fichero creado correctamente",
     "datos": {
@@ -228,7 +248,7 @@ Ejemplo para leer un fichero:
 
 ```json
 {
-    "id_peticion": "req-0003",
+    "id_peticion": "req-0004",
     "servicio": "gesfich",
     "operacion": "leer_fichero",
     "datos": {
@@ -241,7 +261,7 @@ Respuesta:
 
 ```json
 {
-    "id_peticion": "req-0003",
+    "id_peticion": "req-0004",
     "estado": "ok",
     "mensaje": "Fichero encontrado",
     "datos": {
@@ -257,7 +277,7 @@ Ejemplo para actualizar:
 
 ```json
 {
-    "id_peticion": "req-0004",
+    "id_peticion": "req-0005",
     "servicio": "gesfich",
     "operacion": "actualizar_fichero",
     "datos": {
@@ -273,7 +293,7 @@ Ejemplo para borrar:
 
 ```json
 {
-    "id_peticion": "req-0005",
+    "id_peticion": "req-0006",
     "servicio": "gesfich",
     "operacion": "borrar_fichero",
     "datos": {
@@ -300,26 +320,28 @@ l-0001
 
 Un lote recibe un fichero de entrada, un fichero de salida y una lista ordenada de programas.
 
-Ejemplo:
+Ejemplo conceptual:
 
 ```text
 f-0001 -> p-0001 -> p-0002 -> f-0002
 ```
 
-Operaciones:
-
-| Operación | Descripción |
-|---|---|
-| `ejecutar_lote` | Ejecuta una tarea con entrada, salida y programas. |
-| `estado_lote` | Consulta el estado de un lote o lista todos si no recibe identificador. |
-| `listar_lotes` | Lista los procesos de lote. |
-| `matar_lote` | Termina forzosamente un lote. |
+| Operación | `datos` esperados | Respuesta principal |
+|---|---|---|
+| `ejecutar_lote` | `{ "entrada": "f-0001", "salida": "f-0002", "programas": ["p-0001", "p-0002"] }` | Retorna `id_lote`. |
+| `estado_lote` | `{ "id_lote": "l-0001" }` | Retorna el estado del lote. |
+| `estado_lote` | `{}` | Lista el estado de todos los lotes. |
+| `listar_lotes` | `{}` | Lista los procesos de lote. |
+| `matar_lote` | `{ "id_lote": "l-0001" }` | Cambia el lote a `matado`. |
+| `suspender_servicio` | `{}` | Cambia el ejecutor a `suspendido`. |
+| `reasumir_servicio` | `{}` | Cambia el ejecutor a `corriendo`. |
+| `parar_ejecutor` | `{}` | Detiene el ejecutor. |
 
 Ejemplo para ejecutar:
 
 ```json
 {
-    "id_peticion": "req-0006",
+    "id_peticion": "req-0007",
     "servicio": "ejecutor",
     "operacion": "ejecutar_lote",
     "datos": {
@@ -334,7 +356,7 @@ Respuesta:
 
 ```json
 {
-    "id_peticion": "req-0006",
+    "id_peticion": "req-0007",
     "estado": "ok",
     "mensaje": "Proceso de lote iniciado correctamente",
     "datos": {
@@ -348,7 +370,7 @@ Ejemplo para consultar estado:
 
 ```json
 {
-    "id_peticion": "req-0007",
+    "id_peticion": "req-0008",
     "servicio": "ejecutor",
     "operacion": "estado_lote",
     "datos": {
@@ -363,7 +385,7 @@ Ejemplo para matar:
 
 ```json
 {
-    "id_peticion": "req-0008",
+    "id_peticion": "req-0009",
     "servicio": "ejecutor",
     "operacion": "matar_lote",
     "datos": {
@@ -376,7 +398,7 @@ Ejemplo para listar:
 
 ```json
 {
-    "id_peticion": "req-0009",
+    "id_peticion": "req-0010",
     "servicio": "ejecutor",
     "operacion": "listar_lotes",
     "datos": {}
@@ -387,7 +409,7 @@ Respuesta:
 
 ```json
 {
-    "id_peticion": "req-0009",
+    "id_peticion": "req-0010",
     "estado": "ok",
     "mensaje": "Listado de procesos de lote",
     "datos": {
