@@ -137,14 +137,14 @@ Un programa almacena ejecutable, argumentos, variables de ambiente, descripción
 
 | Operación | Datos esperados | Respuesta principal |
 |---|---|---|
-| `registrar_programa` | `{ "ejecutable": "/usr/bin/wc", "argumentos": ["-l"], "ambiente": { "LANG": "es_CO.UTF-8" }, "descripcion": "Cuenta líneas" }` | Retorna `id_programa`. |
-| `leer_programa` | `{ "id_programa": "p-0001" }` | Retorna la información del programa. |
+| `registrar_programa` | `{ "ejecutable": "/usr/bin/wc", "argumentos": ["-l"], "ambiente": { "LANG": "es_CO.UTF-8" }, "descripcion": "Cuenta líneas" }` | Retorna id_programa. |
+| `leer_programa` | `{ "id_programa": "p-0001" }` | Consulta un programa. |
 | `listar_programas` | `{}` | Lista los programas registrados. |
 | `actualizar_programa` | `{ "id_programa": "p-0001", "ejecutable": "/usr/bin/wc", "argumentos": ["-w"], "ambiente": {}, "descripcion": "Cuenta palabras" }` | Actualiza el programa. |
 | `borrar_programa` | `{ "id_programa": "p-0001" }` | Borra el programa. |
-| `suspender_servicio` | `{}` | Cambia el servicio a `suspendido`. |
-| `reasumir_servicio` | `{}` | Cambia el servicio a `corriendo`. |
-| `terminar_servicio` | `{}` | Cambia el servicio a `terminado`. |
+| `suspender_servicio` | `{}` | Cambia el servicio a suspendido. |
+| `reasumir_servicio` | `{}` | Cambia el servicio a corriendo. |
+| `terminar_servicio` | `{}` | Cambia el servicio a terminado. |
 
 Ejemplo para registrar programa:
 
@@ -208,15 +208,14 @@ f-0001
 
 | Operación | Datos esperados | Respuesta principal |
 |---|---|---|
-| `crear_fichero` | `{ "contenido": "texto inicial" }` o `{ "contenido": "" }` | Retorna `id_fichero`. |
-| `leer_fichero` | `{ "id_fichero": "f-0001" }` | Retorna el contenido del fichero. |
-| `leer_fichero` | `{}` | Lista los ficheros registrados. |
+| `crear_fichero` | `{ "contenido": "texto inicial" }` o `{ "contenido": "" }` | Retorna id_fichero. |
+| `leer_fichero` | `{ "id_fichero": "f-0001" }` | Lee un fichero específico o lista los ficheros si no recibe identificador |
 | `listar_ficheros` | `{}` | Lista los ficheros registrados. |
-| `actualizar_fichero` | `{ "id_fichero": "f-0001", "ruta_fichero": "./datos/nuevo.txt" }` | Reemplaza el contenido en `aralmac`. |
+| `actualizar_fichero` | `{ "id_fichero": "f-0001", "ruta_fichero": "./datos/nuevo.txt" }` | Reemplaza el contenido usando la ruta de un fichero externo |
 | `borrar_fichero` | `{ "id_fichero": "f-0001" }` | Borra el fichero. |
-| `suspender_servicio` | `{}` | Cambia el servicio a `suspendido`. |
-| `reasumir_servicio` | `{}` | Cambia el servicio a `corriendo`. |
-| `terminar_servicio` | `{}` | Cambia el servicio a `terminado`. |
+| `suspender_servicio` | `{}` | Cambia el servicio a suspendido. |
+| `reasumir_servicio` | `{}` | Cambia el servicio a corriendo. |
+| `terminar_servicio` | `{}` | Cambia el servicio a terminado. |
 
 Ejemplo para crear fichero:
 
@@ -328,13 +327,12 @@ f-0001 -> p-0001 -> p-0002 -> f-0002
 
 | Operación | Datos esperados | Respuesta principal |
 |---|---|---|
-| `ejecutar_lote` | `{ "entrada": "f-0001", "salida": "f-0002", "programas": ["p-0001", "p-0002"] }` | Retorna `id_lote`. |
-| `estado_lote` | `{ "id_lote": "l-0001" }` | Retorna el estado del lote. |
-| `estado_lote` | `{}` | Lista el estado de todos los lotes. |
+| `ejecutar_lote` | `{ "entrada": "f-0001", "salida": "f-0002", "programas": ["p-0001", "p-0002"] }` | Retorna id_lote. |
+| `estado_lote` | `{ "id_lote": "l-0001" }` |Consulta el estado de un lote o lista todos si no recibe identificador. |
 | `listar_lotes` | `{}` | Lista los procesos de lote. |
-| `matar_lote` | `{ "id_lote": "l-0001" }` | Cambia el lote a `matado`. |
-| `suspender_servicio` | `{}` | Cambia el ejecutor a `suspendido`. |
-| `reasumir_servicio` | `{}` | Cambia el ejecutor a `corriendo`. |
+| `matar_lote` | `{ "id_lote": "l-0001" }` | Termina forzosamente un lote. |
+| `suspender_servicio` | `{}` | Cambia el ejecutor a suspendido. |
+| `reasumir_servicio` | `{}` | Cambia el ejecutor a corriendo. |
 | `parar_ejecutor` | `{}` | Detiene el ejecutor. |
 
 Ejemplo para ejecutar:
@@ -503,7 +501,7 @@ El documento define:
 - Comunicación por tuberías nombradas.
 - Diseño para Linux y Windows 11.
 - Formato de mensajes JSON.
-- Operaciones de `gesprog`, `gesfich` y `ejecutor`.
+- Operaciones de gesprog, gesfich y ejecutor.
 - Estados, errores y operaciones de control.
 
 Con esto dejamos definido el contrato de comunicación entre los procesos. La implementación futura podrá hacerse en Linux y Windows 11 manteniendo la misma API y cambiando solo la forma de manejar las tuberías nombradas.
